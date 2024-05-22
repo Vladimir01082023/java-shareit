@@ -15,6 +15,7 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
     @GetMapping("/{userId}")
     public User getUser(@PathVariable Integer userId) {
         return userService.getUserById(userId);

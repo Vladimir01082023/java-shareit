@@ -9,7 +9,7 @@ import ru.practicum.shareit.exceptions.UserEmailUniqueException;
 
 import javax.validation.ValidationException;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -77,7 +77,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Integer id){
+    public void deleteUser(Integer id) {
         repository.deleteUser(id);
     }
 }
