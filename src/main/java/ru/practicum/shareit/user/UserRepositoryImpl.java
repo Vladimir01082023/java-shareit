@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(Integer id) {
-        User user = users.stream().filter(u -> u.getId() == id).findFirst().orElse(null);
+        User user = users.stream().filter(u -> u.getId().intValue() == id.intValue()).findFirst().orElse(null);
         return user;
     }
 

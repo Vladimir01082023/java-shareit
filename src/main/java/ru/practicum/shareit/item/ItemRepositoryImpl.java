@@ -67,7 +67,7 @@ public class ItemRepositoryImpl implements ItemRepository {
             listItems.addAll(value);
         }
         Item item = listItems.stream()
-                .filter(item1 -> item1.getId() == id)
+                .filter(item1 -> item1.getId().intValue() == id.intValue())
                 .findFirst().orElse(null);
         return item;
     }
