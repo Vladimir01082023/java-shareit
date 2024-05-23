@@ -18,5 +18,7 @@ public class Item {
     private ItemRequest request;
     private User owner;
 
-    public Item() {}
+    public Item() {
+
+    }
 }
