@@ -15,4 +15,5 @@ interface ItemRepository {
     Item updateItem(Integer id, Item item, Integer itemId);
 
     List<Item> getItemByText(String text, Integer userID);
+
 }

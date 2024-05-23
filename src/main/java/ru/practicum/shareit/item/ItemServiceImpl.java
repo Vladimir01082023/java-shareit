@@ -6,6 +6,7 @@ import ru.practicum.shareit.exceptions.NotFoundException;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,28 +15,32 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
     @Override
-    public List<Item> getItems(Integer userId) {
-        return itemRepository.findByUserId(userId);
+    public List<ItemDto> getItems(Integer userId) {
+        return itemRepository.findByUserId(userId).stream()
+                .map(ItemMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Item getItemById(Integer itemId) {
-        return itemRepository.getItemById(itemId);
+    public ItemDto getItemById(Integer id) {
+        return ItemMapper.toDto(itemRepository.getItemById(id));
     }
 
     @Override
-    public List<Item> getItemByText(String itemText, Integer userId) {
+    public List<ItemDto> getItemByText(String itemText, Integer userId) {
 
         if (itemRepository.getItemByText(itemText, userId) != null) {
-            return itemRepository.getItemByText(itemText, userId);
+            return itemRepository.getItemByText(itemText, userId).stream()
+                    .map(ItemMapper::toDto)
+                    .collect(Collectors.toList());
         } else
             throw new NotFoundException("Item not found");
     }
 
     @Override
-    public Item addNewItem(Integer userId, Item item) {
-        itemRepository.save(userId, item);
-        return item;
+    public ItemDto addNewItem(Integer userId, ItemDto item) {
+        return ItemMapper.toDto(itemRepository.save(userId, ItemMapper.fromDto(item)));
+
     }
 
     @Override
@@ -43,8 +48,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item updateItem(Integer userId, Item item, Integer itemId) {
-        return itemRepository.updateItem(userId, item, itemId);
+    public ItemDto updateItem(Integer userId, ItemDto item, Integer itemId) {
+        return ItemMapper.toDto(itemRepository.updateItem(userId, ItemMapper.fromDto(item), itemId));
     }
 
 }

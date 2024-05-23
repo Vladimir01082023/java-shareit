@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
-    private final List<User> users = new ArrayList<>();
+    private final Map<Integer, User> users = new HashMap<>();
     private final Map<Integer, String> usersEmails = new HashMap<>();
     private Integer id = 1;
 
@@ -25,13 +25,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return users;
+        List<User> usersList = new ArrayList<>();
+        users.values().forEach(user -> usersList.add(user));
+        return usersList;
     }
 
     @Override
     public User save(User user) {
         user.setId(generateId());
-        users.add(user);
+        users.put(user.getId(), user);
         usersEmails.put(user.getId(), user.getEmail());
         return user;
     }
@@ -61,7 +63,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserById(Integer id) {
-        User user = users.stream().filter(u -> u.getId().intValue() == id.intValue()).findFirst().orElse(null);
+        User user = findAll().stream().filter(u -> u.getId().intValue() == id.intValue()).findFirst().orElse(null);
         return user;
     }
 
@@ -85,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteUser(Integer userId) {
-        users.remove(getUserById(userId));
+        users.remove(userId);
         usersEmails.remove(userId);
         log.info("User is deleted");
     }

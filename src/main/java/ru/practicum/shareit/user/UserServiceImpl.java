@@ -9,6 +9,7 @@ import ru.practicum.shareit.exceptions.UserEmailUniqueException;
 
 import javax.validation.ValidationException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -19,18 +20,20 @@ class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         log.info("All users are gotten");
-        return repository.findAll();
+        return repository.findAll().stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public User getUserById(Integer id) {
-        return repository.getUserById(id);
+    public UserDto getUserById(Integer id) {
+        return UserMapper.toUserDto(repository.getUserById(id));
     }
 
     @Override
-    public User saveUser(User user) {
+    public UserDto saveUser(UserDto user) {
         if (user.getEmail() == null) {
             throw new NotFoundException("User must have an email address");
         }
@@ -39,19 +42,19 @@ class UserServiceImpl implements UserService {
             throw new ValidationException("User with email " + user.getEmail() + " not found");
         }
 
-        if (!checkEmailPresence(user)) {
+        if (!checkEmailPresence(UserMapper.fromUserDto(user))) {
             log.info("User {} is saved: ", user);
-            return repository.save(user);
+            return UserMapper.toUserDto(repository.save(UserMapper.fromUserDto(user)));
         } else {
             throw new UserEmailUniqueException("User " + user.getName() + " is already saved");
         }
     }
 
     @Override
-    public User updateUser(User user, Integer userID) {
+    public UserDto updateUser(UserDto user, Integer userID) {
         if (repository.getUserById(userID) != null) {
             log.info("User is updated");
-            return repository.update(user, userID);
+            return UserMapper.toUserDto(repository.update(UserMapper.fromUserDto(user), userID));
         } else {
             throw new NotFoundException(String.format("User with ID %d does not exist", user.getId()));
         }
@@ -62,18 +65,11 @@ class UserServiceImpl implements UserService {
         User a = users.stream()
                 .filter(u -> u.getEmail().equals(user.getEmail()))
                 .findAny().orElse(null);
-        if (a == null) {
-            return false;
-        } else
-            return true;
+        return a != null;
     }
 
     public boolean checkEmail(String email) {
-        if (email.contains("@")) {
-            return true;
-        } else {
-            return false;
-        }
+        return email.contains("@");
     }
 
     @Override
