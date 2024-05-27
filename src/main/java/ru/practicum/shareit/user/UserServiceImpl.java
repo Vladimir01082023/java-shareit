@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exceptions.NotFoundException;
 import ru.practicum.shareit.exceptions.UserEmailUniqueException;
 
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,14 +33,6 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto saveUser(UserDto user) {
-        if (user.getEmail() == null) {
-            throw new NotFoundException("User must have an email address");
-        }
-
-        if (!checkEmail(user.getEmail())) {
-            throw new ValidationException("User with email " + user.getEmail() + " not found");
-        }
-
         if (!checkEmailPresence(UserMapper.fromUserDto(user))) {
             log.info("User {} is saved: ", user);
             return UserMapper.toUserDto(repository.save(UserMapper.fromUserDto(user)));
@@ -66,10 +57,6 @@ class UserServiceImpl implements UserService {
                 .filter(u -> u.getEmail().equals(user.getEmail()))
                 .findAny().orElse(null);
         return a != null;
-    }
-
-    public boolean checkEmail(String email) {
-        return email.contains("@");
     }
 
     @Override
