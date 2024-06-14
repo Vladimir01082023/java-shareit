@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private Integer id;
+    private Long id;
     @NotBlank
     private String name;
     @Email

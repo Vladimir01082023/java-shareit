@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exceptions.NotFoundException;
-import ru.practicum.shareit.exceptions.UserEmailUniqueException;
+import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,40 +26,42 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Integer id) {
-        return UserMapper.toUserDto(repository.getUserById(id));
+    public UserDto getUserById(Long id) {
+        if(!repository.existsById(id)) {
+            throw new NotFoundUserItemExceptions("User with id " + id + " not found");
+        }
+        return UserMapper.toUserDto(repository.findById(id));
     }
 
     @Override
     public UserDto saveUser(UserDto user) {
-        if (!checkEmailPresence(UserMapper.fromUserDto(user))) {
             log.info("User {} is saved: ", user);
-            return UserMapper.toUserDto(repository.save(UserMapper.fromUserDto(user)));
-        } else {
-            throw new UserEmailUniqueException("User " + user.getName() + " is already saved");
-        }
+        return UserMapper.toUserDto(repository.save(UserMapper.fromUserDto(user)));
     }
 
     @Override
-    public UserDto updateUser(UserDto user, Integer userID) {
-        if (repository.getUserById(userID) != null) {
-            log.info("User is updated");
-            return UserMapper.toUserDto(repository.update(UserMapper.fromUserDto(user), userID));
-        } else {
-            throw new NotFoundException(String.format("User with ID %d does not exist", user.getId()));
-        }
-    }
+    public UserDto updateUser(UserDto updatedUser, Long userId) {
+        log.info(String.format("Получен запрос на обновление пользовтаеля с id = {}", userId));
 
-    public boolean checkEmailPresence(User user) {
-        List<User> users = repository.findAll();
-        User a = users.stream()
-                .filter(u -> u.getEmail().equals(user.getEmail()))
-                .findAny().orElse(null);
-        return a != null;
+        User curUser = UserMapper.fromUserDto(getUserById(userId));
+
+        if (updatedUser.getName() != null && !curUser.getName().equals(updatedUser.getName())) {
+            curUser.setName(updatedUser.getName());
+        }
+
+        if (updatedUser.getEmail() != null && !curUser.getEmail().equals(updatedUser.getEmail())) {
+            curUser.setEmail(updatedUser.getEmail());
+        }
+
+        repository.save(curUser);
+
+        log.info("Пользователь с id = {} успешно обновлен", userId);
+
+        return UserMapper.toUserDto(curUser);
     }
 
     @Override
-    public void deleteUser(Integer id) {
-        repository.deleteUser(id);
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
 }
