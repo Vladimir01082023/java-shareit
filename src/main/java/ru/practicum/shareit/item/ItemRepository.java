@@ -11,11 +11,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findItemByOwnerId(Long ownerId);
 
+
     @Query(value = "select * from ITEMS as it " +
             "where it.ITEM_AVAILABLE = TRUE " +
             "and " +
             "(it. ITEM_DESCRIPTION ilike %?1% or it.ITEM_NAME ilike %?1%)", nativeQuery = true)
     List<Item> getItemByText(String itemText);
-
 
 }

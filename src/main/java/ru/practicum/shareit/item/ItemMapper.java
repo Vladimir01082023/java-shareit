@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item;
 
 
-import ru.practicum.shareit.booking.Booking;
-
 import java.util.Optional;
 
 public class ItemMapper {
@@ -39,18 +37,7 @@ public class ItemMapper {
 //        itemDto.setRequestId(item.get().getRequestId());
         return itemDto;
     }
-    public static ItemDto toDtoWithBookings(Optional<Item> item, Booking lastBooking, Booking nextBooking) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.get().getId());
-        itemDto.setName(item.get().getName());
-        itemDto.setDescription(item.get().getDescription());
-        itemDto.setAvailable(item.get().getAvailable());
-        itemDto.setOwnerId(item.get().getOwnerId());
-        itemDto.setNextBooking(nextBooking);
-        itemDto.setLastBooking(lastBooking);
-//        itemDto.setRequestId(item.getRequestId());
-        return itemDto;
-    }
+
 }
 
 

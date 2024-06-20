@@ -105,12 +105,26 @@ public class BookingServiceImpl implements BookingService {
         }
         else if(state.equals("FUTURE")){
             return bookingRepository.getAllBookingsByBookerId(userID).stream()
-                    .filter(booking -> booking.getStart().isAfter(curTime))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         }
+        else if(state.equals("PAST")){
+            return bookingRepository.getAllBookingsByBookerId(userID).stream()
+                    .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        }
+        else if(state.equals("CURRENT")){
+            return bookingRepository.getAllBookingsByBookerId(userID).stream()
+                    .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .filter(booking -> (booking.getStart().isBefore(LocalDateTime.now()) ||
+                            booking.getStart().isEqual(LocalDateTime.now())) &&
+                            booking.getEnd().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        }
 
-        else if(state.equals("WAITING") || state.equals("CURRENT") || state.equals("REJECTED") || state.equals("PAST")) {
+        else if(state.equals("WAITING") ||  state.equals("REJECTED")) {
             return bookingRepository.getAllBookingsForUser(userID, state).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
@@ -133,8 +147,20 @@ public class BookingServiceImpl implements BookingService {
         }
         else if(state.equals("FUTURE")){
             return bookingRepository.findBookingsByOwnerId(userID).stream()
-                    .filter(booking -> booking.getStart().isAfter(curTime))
+                    .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .collect(Collectors.toList());
+        }
+        else if(state.equals("PAST")){
+            return bookingRepository.findBookingsByOwnerId(userID).stream()
+                    .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        }
+        else if(state.equals("CURRENT")){
+            return bookingRepository.findBookingsByOwnerId(userID).stream()
+                    .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
+                    .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
         }
 

@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Item {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
     @Column(name = "item_name", nullable = false)
@@ -25,7 +25,7 @@ public class Item {
     private String description;
     @Column(name = "item_available", nullable = false)
     private Boolean available;
-//    @Column(name = "item_request_id", nullable = false)
+    //    @Column(name = "item_request_id", nullable = false)
 //    private Long requestId;
     @Column(name = "item_owner_id", nullable = false)
     private Long ownerId;
