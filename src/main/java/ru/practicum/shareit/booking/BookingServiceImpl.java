@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
         if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
-        if (userID == curItem.getOwnerId()) {
+        if (userID.equals(curItem.getOwnerId())) {
             throw new NotFoundUserItemExceptions("Owner can not book his own item");
         }
         if (curItem == null) {

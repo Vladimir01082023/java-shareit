@@ -33,7 +33,7 @@ public class BookingController {
         Item curItem = booking.getItem();
         User booker = booking.getBooker();
         Long owner = curItem.getOwnerId();
-        if (booker.getId() == userId || owner == userId) {
+        if (booker.getId().equals(userId) || owner.equals(userId)) {
             return bookingService.getBooking(bookingId);
         } else {
             throw new NotFoundUserItemExceptions("Only user or booker can view this booking");
@@ -47,7 +47,7 @@ public class BookingController {
                                   @RequestHeader("X-Sharer-User-Id") Long userId) {
         Booking booking = bookingService.getBooking(bookingId);
         Item curItem = booking.getItem();
-        if (curItem.getOwnerId() != userId) {
+        if (!(curItem.getOwnerId().equals(userId))) {
             throw new NotFoundUserItemExceptions("Only owner of an item can approve this booking");
         }
         return bookingService.approveBooking(approved, bookingId);

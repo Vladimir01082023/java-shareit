@@ -96,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item currentItem = ItemMapper.fromDto(getItemById(itemId));
 
-        if (currentItem.getOwnerId() != userId) {
+        if (!(currentItem.getOwnerId().equals(userId))) {
             throw new NotFoundUserItemExceptions("Id пользователя отличается от id владельца item");
         }
 
@@ -171,7 +171,7 @@ public class ItemServiceImpl implements ItemService {
     public boolean checkUserOnCommentForItem(Long userId, Long itemId) {
         List<Booking> listBookingsForUser = bookingRepository.getAllBookingsByBookerId(userId);
         Booking userBookingItem = listBookingsForUser.stream()
-                .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId() == itemId)
+                .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId().equals(itemId))
                 .findFirst().orElse(null);
         if (userBookingItem == null) {
             return false;

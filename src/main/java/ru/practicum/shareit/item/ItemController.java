@@ -23,7 +23,7 @@ public class ItemController {
 
     @GetMapping("/{itemID}")
     public ItemBookDto getItemById(@PathVariable("itemID") Long itemID, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        if (userId == itemService.getItemById(itemID).getOwnerId() && itemService.checkItemOnBooking(itemID)) {
+        if (userId.equals(itemService.getItemById(itemID).getOwnerId()) && itemService.checkItemOnBooking(itemID)) {
             return itemService.getItemWithBooking(itemID, userId);
         }
         return itemService.getItemByIdWithBook(itemID);
