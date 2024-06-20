@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
         if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
-        if(userID == curItem.getOwnerId()){
+        if (userID == curItem.getOwnerId()) {
             throw new NotFoundUserItemExceptions("Owner can not book his own item");
         }
         if (curItem == null) {
@@ -78,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Booking approveBooking(boolean approval, Long bookingId) {
-        if(bookingRepository.getBookingById(bookingId).getStatus().equals(Status.APPROVED)){
+        if (bookingRepository.getBookingById(bookingId).getStatus().equals(Status.APPROVED)) {
             throw new ItemAvailableException("Booking is already approved");
         }
         Status status;
@@ -94,82 +94,70 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getAllBookingsForUser(String state, Long userID) {
-        if(userService.getUserById(userID) == null) {
+        if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
         log.info("Получен запрос на получение всех бронирований пользователя {}", userID);
-        if(state == null || state.equals("ALL")){
+        if (state == null || state.equals("ALL")) {
             return bookingRepository.getAllBookingsByBookerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("FUTURE")){
+        } else if (state.equals("FUTURE")) {
             return bookingRepository.getAllBookingsByBookerId(userID).stream()
                     .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("PAST")){
+        } else if (state.equals("PAST")) {
             return bookingRepository.getAllBookingsByBookerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("CURRENT")){
+        } else if (state.equals("CURRENT")) {
             return bookingRepository.getAllBookingsByBookerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> (booking.getStart().isBefore(LocalDateTime.now()) ||
                             booking.getStart().isEqual(LocalDateTime.now())) &&
                             booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
-        }
-
-        else if(state.equals("WAITING") ||  state.equals("REJECTED")) {
+        } else if (state.equals("WAITING") || state.equals("REJECTED")) {
             return bookingRepository.getAllBookingsForUser(userID, state).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             throw new ItemAvailableException("Unknown state: " + state);
         }
     }
 
     @Override
     public List<Booking> getAllBookingsForOwner(String state, Long userID) {
-        if(userService.getUserById(userID) == null) {
+        if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
         log.info("Получен запрос на получение всех бронирований владельца {}", userID);
-        if(state == null || state.equals("ALL")){
+        if (state == null || state.equals("ALL")) {
             return bookingRepository.findBookingsByOwnerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("FUTURE")){
+        } else if (state.equals("FUTURE")) {
             return bookingRepository.findBookingsByOwnerId(userID).stream()
                     .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("PAST")){
+        } else if (state.equals("PAST")) {
             return bookingRepository.findBookingsByOwnerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
                     .collect(Collectors.toList());
-        }
-        else if(state.equals("CURRENT")){
+        } else if (state.equals("CURRENT")) {
             return bookingRepository.findBookingsByOwnerId(userID).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
-        }
-
-        else if(state.equals("WAITING") || state.equals("CURRENT") || state.equals("REJECTED") || state.equals("PAST")) {
+        } else if (state.equals("WAITING") || state.equals("CURRENT") || state.equals("REJECTED") || state.equals("PAST")) {
             return bookingRepository.findBookingsByOwnerIdAndState(userID, state).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             throw new ItemAvailableException("Unknown state: " + state);
         }
     }
