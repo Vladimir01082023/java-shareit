@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.Status;
+import ru.practicum.shareit.booking.DTO.BookingDTO;
+import ru.practicum.shareit.booking.Mapper.BookingMapper;
 import ru.practicum.shareit.exceptions.ItemAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 import ru.practicum.shareit.item.ItemDto;

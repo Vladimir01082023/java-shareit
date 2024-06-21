@@ -2,7 +2,7 @@ package ru.practicum.shareit.item;
 
 
 import lombok.Data;
-import ru.practicum.shareit.booking.BookDto;
+import ru.practicum.shareit.booking.DTO.BookDto;
 import ru.practicum.shareit.item.comments.Comment;
 
 import java.util.ArrayList;

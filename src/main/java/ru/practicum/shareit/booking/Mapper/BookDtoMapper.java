@@ -1,6 +1,8 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.Mapper;
 
 
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.DTO.BookDto;
 
 public class BookDtoMapper {
 
