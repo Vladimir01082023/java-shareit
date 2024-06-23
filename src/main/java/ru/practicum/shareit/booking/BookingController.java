@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.DTO.BookingDTO;
 import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 import ru.practicum.shareit.item.Item;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.User;
 
 import java.util.List;
