@@ -30,11 +30,4 @@ public class Item {
     @Column(name = "item_owner_id", nullable = false)
     private Long ownerId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }
