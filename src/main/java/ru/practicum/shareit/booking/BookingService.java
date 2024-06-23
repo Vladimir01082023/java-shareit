@@ -11,10 +11,6 @@ public interface BookingService {
 
     Booking getBooking(Long bookingId);
 
-    List<Booking> getBookings();
-
-    void deleteBooking(Integer bookingId);
-
     Booking approveBooking(boolean approval, Long bookingID);
 
     List<Booking> getAllBookingsForUser(String state, Long userID);

@@ -69,16 +69,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getBookings() {
-        return List.of();
-    }
-
-    @Override
-    public void deleteBooking(Integer bookingId) {
-
-    }
-
-    @Override
     public Booking approveBooking(boolean approval, Long bookingId) {
         if (bookingRepository.getBookingById(bookingId).getStatus().equals(Status.APPROVED)) {
             throw new ItemAvailableException("Booking is already approved");

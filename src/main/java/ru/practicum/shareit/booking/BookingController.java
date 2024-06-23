@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
-    private final ItemService itemService;
 
     @PostMapping
     public Booking booking(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody BookingDTO bookingDTO) {
