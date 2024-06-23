@@ -29,8 +29,4 @@ public class Item {
 //    private Long requestId;
     @Column(name = "item_owner_id", nullable = false)
     private Long ownerId;
-<<<<<<< HEAD
-
-=======
->>>>>>> 7ebbf106739707a57bab6e30d65a5d81effa7fd2
 }
