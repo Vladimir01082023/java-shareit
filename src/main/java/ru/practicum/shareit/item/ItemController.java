@@ -49,12 +49,6 @@ public class ItemController {
         return itemService.updateItem(userId, item, itemID);
     }
 
-    @DeleteMapping("/{itemId}")
-    public void deleteItem(@RequestHeader("X-Sharer-User-Id") Long userId,
-                           @PathVariable Long itemId) {
-        itemService.deleteItem(userId, itemId);
-    }
-
     @PostMapping("/{itemId}/comment")
     public Comment addComment(@PathVariable Long itemId, @RequestBody CommentDto comment,
                               @RequestHeader("X-Sharer-User-Id") Long userId) {

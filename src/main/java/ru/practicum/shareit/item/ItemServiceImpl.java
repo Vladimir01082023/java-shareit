@@ -87,10 +87,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteItem(Long userId, Long itemId) {
-    }
-
-    @Override
     public ItemDto updateItem(Long userId, ItemDto item, Long itemId) {
         log.info(String.format("Получен запрос на обновление вещи с id = {}", itemId));
 
@@ -164,8 +160,8 @@ public class ItemServiceImpl implements ItemService {
         }
         Comment comment = CommentMapper.fromDTO(commentDto, itemRepository.findById(itemId).get(),
                 userRepository.findById(userId).get());
-        Comment df = commentRepository.save(comment);
-        return df;
+        Comment saveComment = commentRepository.save(comment);
+        return saveComment;
     }
 
     public boolean checkUserOnCommentForItem(Long userId, Long itemId) {

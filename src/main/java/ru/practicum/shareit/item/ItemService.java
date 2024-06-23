@@ -10,8 +10,6 @@ public interface ItemService {
 
     ItemDto addNewItem(Long userId, ItemDto item);
 
-    void deleteItem(Long userId, Long itemId);
-
     ItemDto updateItem(Long userId, ItemDto item, Long itemId);
 
     ItemDto getItemById(Long itemId);
