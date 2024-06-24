@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exceptions.ItemAvailableException;
 import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 
 import java.util.List;
@@ -35,7 +36,10 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDto saveUser(UserDto user) {
-            log.info("User {} is saved: ", user);
+        if (repository.getUserById(user.getId()) != null) {
+            throw new ItemAvailableException("User with id " + user.getId() + " already exists");
+        }
+        log.info("User {} is saved: ", user);
         return UserMapper.toUserDto(repository.save(UserMapper.fromUserDto(user)));
     }
 
@@ -43,6 +47,9 @@ class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto updatedUser, Long userId) {
         log.info(String.format("Получен запрос на обновление пользовтаеля с id = {}", userId));
 
+        if (updatedUser.getName() == null && updatedUser.getEmail() == null) {
+            throw new ItemAvailableException("Name and email can not be null");
+        }
         User curUser = UserMapper.fromUserDto(getUserById(userId));
 
         if (updatedUser.getName() != null && !curUser.getName().equals(updatedUser.getName())) {

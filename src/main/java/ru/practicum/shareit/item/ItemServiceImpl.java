@@ -147,11 +147,12 @@ public class ItemServiceImpl implements ItemService {
         if (!itemRepository.existsById(id)) {
             throw new NotFoundUserItemExceptions("User not found");
         }
+        List<Comment> s = commentRepository.findByItemId(id);
         return ItemBookMapper.toDtoWithoutBookings(itemRepository.findById(id), commentRepository.findByItemId(id));
     }
 
     @Override
-    public Comment addComment(Long itemId, CommentDto commentDto, Long userId) {
+    public CommentDto addComment(Long itemId, CommentDto commentDto, Long userId) {
         if (!checkUserOnCommentForItem(userId, itemId)) {
             throw new ItemAvailableException("User is never booked this item!");
         }
@@ -161,7 +162,7 @@ public class ItemServiceImpl implements ItemService {
         Comment comment = CommentMapper.fromDTO(commentDto, itemRepository.findById(itemId).get(),
                 userRepository.findById(userId).get());
         Comment saveComment = commentRepository.save(comment);
-        return saveComment;
+        return CommentMapper.toDTO(saveComment);
     }
 
     public boolean checkUserOnCommentForItem(Long userId, Long itemId) {
@@ -169,10 +170,6 @@ public class ItemServiceImpl implements ItemService {
         Booking userBookingItem = listBookingsForUser.stream()
                 .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId().equals(itemId))
                 .findFirst().orElse(null);
-        if (userBookingItem == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return userBookingItem != null;
     }
 }

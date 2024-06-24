@@ -10,6 +10,8 @@ public class BookDtoMapper {
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setBookerId(book.getBooker().getId());
+        bookDto.setStart(book.getStart());
+        bookDto.setEnd(book.getEnd());
         return bookDto;
     }
 }

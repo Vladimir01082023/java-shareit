@@ -3,7 +3,7 @@ package ru.practicum.shareit.item;
 
 import lombok.Data;
 import ru.practicum.shareit.booking.DTO.BookDto;
-import ru.practicum.shareit.item.comments.Comment;
+import ru.practicum.shareit.item.comments.CommentDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,5 +19,5 @@ public class ItemBookDto {
     private Long ownerId;
     private BookDto lastBooking;
     private BookDto nextBooking;
-    private List<Comment> comments = new ArrayList<>();
+    private List<CommentDto> comments = new ArrayList<>();
 }
