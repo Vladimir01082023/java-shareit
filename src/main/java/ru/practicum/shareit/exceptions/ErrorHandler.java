@@ -57,6 +57,14 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleItemAvailableException(final ItemAvailableException e) {
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse ha(final MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
