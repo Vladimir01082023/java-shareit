@@ -3,6 +3,8 @@ package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.comments.Comment;
 import ru.practicum.shareit.item.comments.CommentMapper;
+import ru.practicum.shareit.item.dto.ItemBookDto;
+import ru.practicum.shareit.item.model.Item;
 
 
 import java.util.List;

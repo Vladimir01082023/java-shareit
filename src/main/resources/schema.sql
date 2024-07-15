@@ -16,9 +16,12 @@ create table IF NOT EXISTS ITEM_REQUEST
 (
     ITEM_REQUEST_ID           LONG GENERATED AlWAYS AS IDENTITY PRIMARY KEY NOT NULL,
     ITEM_REQUEST_DESCRIPTION  CHARACTER VARYING(250)                        NOT NULL,
-    ITEM_REQUEST_TIME_CREATED TIMESTAMP                                     NOT NULL,
+    CREATED                   TIMESTAMP                                     NOT NULL,
+    REQUESTOR_ID               LONG NOT NULL,
     constraint ITEM_REQUEST_PK
-        primary key (ITEM_REQUEST_ID)
+        primary key (ITEM_REQUEST_ID),
+    constraint REQUESTOR_id_fk
+    foreign key (REQUESTOR_ID) references USERS ON DELETE CASCADE
 );
 create table IF NOT EXISTS ITEMS
 (
@@ -27,10 +30,12 @@ create table IF NOT EXISTS ITEMS
     ITEM_DESCRIPTION VARCHAR(250)                                  NOT NULL,
     ITEM_AVAILABLE   BOOLEAN                                       NOT NULL,
     ITEM_OWNER_ID    LONG                                          NOT NULL,
+    ITEM_REQUEST_ID LONG,
     constraint ITEMS_pk primary key (ITEM_ID),
-    constraint ITEMS_USERS_USER_ID_fk foreign key (ITEM_OWNER_ID) references USERS ON DELETE CASCADE
---     ITEM_REQUEST_ID INTEGER not null,
---     constraint  ITEMS_REQUEST_pk foreign key (ITEM_REQUEST_ID) references ITEM_REQUEST ON DELETE CASCADE
+    constraint ITEMS_USER_ID_fk
+    foreign key (ITEM_OWNER_ID) references USERS ON DELETE CASCADE,
+    constraint ITEMS_REQUEST_pk
+    foreign key (ITEM_REQUEST_ID) references ITEM_REQUEST ON DELETE CASCADE
 );
 create table IF NOT EXISTS BOOKING
 (
