@@ -2,7 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.Mapper.BookDtoMapper;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.ItemAvailableException;
@@ -131,10 +131,10 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
 
         if (listBookingBeforeCurrentTime.size() != 0) {
-            itemBookDto.setLastBooking(BookDtoMapper.map(listBookingBeforeCurrentTime.get(0)));
+            itemBookDto.setLastBooking(BookingMapper.map(listBookingBeforeCurrentTime.get(0)));
         }
         if (listBookingAfterCurrentTime.size() != 0) {
-            itemBookDto.setNextBooking(BookDtoMapper.map(listBookingAfterCurrentTime.get(listBookingAfterCurrentTime.size() - 1)));
+            itemBookDto.setNextBooking(BookingMapper.map(listBookingAfterCurrentTime.get(listBookingAfterCurrentTime.size() - 1)));
         }
         return ItemBookMapper.toDtoWithBookings(itemRepository.findById(itemId), itemBookDto, commentRepository.findByItemId(itemId));
     }

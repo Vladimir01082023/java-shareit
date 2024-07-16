@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.booking.DTO.BookingDTO;
+import ru.practicum.shareit.booking.dto.BookingDTO;
 import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
