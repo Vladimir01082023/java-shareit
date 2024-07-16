@@ -13,7 +13,7 @@ import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.controller.ItemRequestController;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
@@ -52,7 +52,7 @@ public class ItemRequestControllerTest {
     @Autowired
     private MockMvc mvc;
     private LocalDateTime dateTime;
-    private ItemRequestDto itemRequestDto;
+    private ItemRequestReceiveDto itemRequestReceiveDto;
     private ItemDto itemDto = new ItemDto(1L, "name", "description", true, 1L, 1L);
     private ItemRequestResponseDto itemRequestDtoResponse;
     private ItemRequest itemRequest;

@@ -22,9 +22,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> getAllBookingsByBookerId(Long bookerId);
 
-    @Query(value = "select * from BOOKING as book inner join items as it on book.BOOK_ITEM_ID = it.ITEM_ID " +
-            "where it.ITEM_OWNER_ID = ?1 ORDER BY book.BOOK_START_DATE DESC", nativeQuery = true)
-    Page<Booking> findBookingsByOwnerId(Long ownerId, Pageable pageable);
+    Page<Booking> findByItemOwnerIdOrderByStartDesc(Long itemOwnerId, Pageable pageable);
 
     @Query(value = "select * from BOOKING as book inner join items as it on book.BOOK_ITEM_ID = it.ITEM_ID " +
             "where it.ITEM_OWNER_ID = ?1 and book.BOOK_STATUS = ?2 ORDER BY book.BOOK_START_DATE DESC", nativeQuery = true)

@@ -92,28 +92,31 @@ public class BookingServiceImpl implements BookingService {
         if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
+
+        final PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+
         log.info("Получен запрос на получение всех бронирований владельца {}", userID);
         if (state == null || state.equals("ALL")) {
-            return bookingRepository.findBookingsByOwnerId(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findByItemOwnerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else if (state.equals("FUTURE")) {
-            return bookingRepository.findBookingsByOwnerId(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findByItemOwnerIdOrderByStartDesc(userID, pageRequest).stream()
                     .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else if (state.equals("PAST")) {
-            return bookingRepository.findBookingsByOwnerId(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findByItemOwnerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
                     .collect(Collectors.toList());
         } else if (state.equals("CURRENT")) {
-            return bookingRepository.findBookingsByOwnerId(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findByItemOwnerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()) && booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
         } else if (state.equals("WAITING") || state.equals("CURRENT") || state.equals("REJECTED") || state.equals("PAST")) {
-            return bookingRepository.findBookingsByOwnerIdAndState(userID, state, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findBookingsByOwnerIdAndState(userID, state, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else {
@@ -126,30 +129,33 @@ public class BookingServiceImpl implements BookingService {
         if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
         }
+
+        final PageRequest pageRequest = PageRequest.of(from > 0 ? from / size : 0, size);
+
         log.info("Получен запрос на получение всех бронирований пользователя {}", userID);
         if (state == null || state.equals("ALL")) {
-            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else if (state.equals("FUTURE")) {
-            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, pageRequest).stream()
                     .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else if (state.equals("PAST")) {
-            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()))
                     .collect(Collectors.toList());
         } else if (state.equals("CURRENT")) {
-            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.getAllBookingsByBookerIdOrderByStartDesc(userID, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .filter(booking -> (booking.getStart().isBefore(LocalDateTime.now()) ||
                             booking.getStart().isEqual(LocalDateTime.now())) &&
                             booking.getEnd().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
         } else if (state.equals("WAITING") || state.equals("REJECTED")) {
-            return bookingRepository.findByBookerIdAndStatusEquals(userID, state, PageRequest.of(from > 0 ? from / size : 0, size)).stream()
+            return bookingRepository.findByBookerIdAndStatusEquals(userID, state, pageRequest).stream()
                     .sorted(Comparator.comparing(Booking::getStart, Comparator.nullsLast(Comparator.reverseOrder())))
                     .collect(Collectors.toList());
         } else {

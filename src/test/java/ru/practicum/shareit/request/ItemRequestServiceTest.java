@@ -12,7 +12,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -49,7 +49,7 @@ public class ItemRequestServiceTest {
 
     private LocalDateTime dateTime;
     private ItemRequest itemRequest;
-    private ItemRequestDto itemRequestDto;
+    private ItemRequestReceiveDto itemRequestReceiveDto;
     private ItemDto itemDto = new ItemDto(1L, "name", "description", true, null, 1L);
     private ItemRequestResponseDto itemRequestDtoResponse;
     private Item item;
@@ -79,7 +79,7 @@ public class ItemRequestServiceTest {
         item.setOwnerId(user.getId());
         item.setRequestId(itemRequest.getId());
 
-        itemRequestDto = new ItemRequestDto(1L, "description");
+        itemRequestReceiveDto = new ItemRequestReceiveDto(1L, "description");
 
         itemRequestDtoResponse = new ItemRequestResponseDto("description", dateTime,
                 List.of(ItemMapper.toResponseDto(item)));
@@ -92,24 +92,24 @@ public class ItemRequestServiceTest {
         when(userRepository.existsById(anyLong()))
                 .thenReturn(true);
 
-        ItemRequest saveItemRequestDto = itemRequestServiceIml.createItemRequest(itemRequestDto, 1L);
+        ItemRequest saveItemRequestDto = itemRequestServiceIml.createItemRequest(itemRequestReceiveDto, 1L);
 
         assertItemRequest(itemRequest, saveItemRequestDto);
 
-        ItemRequestDto newItemRequestDto = ItemRequestMapper.toDto(item);
-        assertThat(newItemRequestDto.getDescription(), is(itemRequest.getDescription()));
+        ItemRequestReceiveDto newItemRequestReceiveDto = ItemRequestMapper.toDto(item);
+        assertThat(newItemRequestReceiveDto.getDescription(), is(itemRequest.getDescription()));
 
         ItemRequestResponseDto itemRequestResponseDto = ItemRequestMapper.toItemRequestResponseDto(itemRequest,
                 List.of(ItemMapper.toResponseDto(item)));
-        assertThat(itemRequestResponseDto.getDescription(), is(itemRequestDto.getDescription()));
+        assertThat(itemRequestResponseDto.getDescription(), is(itemRequestReceiveDto.getDescription()));
     }
 
     @Test
     public void createItemRequest_whenCreateNewItemRequestWitchIncorrectData_shouldThrowsException() {
-        itemRequestDto = new ItemRequestDto(99L, "description");
+        itemRequestReceiveDto = new ItemRequestReceiveDto(99L, "description");
 
         NotFoundUserItemExceptions exception = assertThrows(NotFoundUserItemExceptions.class, () ->
-                itemRequestServiceIml.createItemRequest(itemRequestDto, 1L));
+                itemRequestServiceIml.createItemRequest(itemRequestReceiveDto, 1L));
 
         assertThat(exception.getMessage(), is("User does not exist"));
     }

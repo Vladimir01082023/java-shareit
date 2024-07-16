@@ -7,7 +7,7 @@ import ru.practicum.shareit.exceptions.NotFoundUserItemExceptions;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
@@ -42,11 +42,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequest createItemRequest(ItemRequestDto itemRequestDto, Long userId) {
+    public ItemRequest createItemRequest(ItemRequestReceiveDto itemRequestReceiveDto, Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundUserItemExceptions("User does not exist");
         }
-        return itemRequestRepository.save(ItemRequestMapper.fromDto(itemRequestDto, userId, LocalDateTime.now()));
+        return itemRequestRepository.save(ItemRequestMapper.fromDto(itemRequestReceiveDto, userId, LocalDateTime.now()));
     }
 
     @Override

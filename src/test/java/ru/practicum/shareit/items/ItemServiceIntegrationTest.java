@@ -13,7 +13,7 @@ import ru.practicum.shareit.item.dto.ItemBookDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -46,7 +46,7 @@ public class ItemServiceIntegrationTest {
     BookingDTO itemBooking2 = new BookingDTO(2L, 1L, 1L, currentTime, currentTime.plusDays(1), Status.WAITING);
 
     CommentDto comment1 = new CommentDto(1L, "comment", "user1", currentTime);
-    ItemRequestDto request = new ItemRequestDto(1L, "description");
+    ItemRequestReceiveDto request = new ItemRequestReceiveDto(1L, "description");
 
 
     @Test

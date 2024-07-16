@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exceptions.ItemAvailableException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
+import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.request.model.ItemRequest;
 
@@ -22,11 +24,11 @@ public class ItemRequestController {
     private final ItemRequestService itemRequestService;
 
     @PostMapping
-    public ItemRequest post(@RequestBody ItemRequestDto requestDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ItemRequestDto post(@RequestBody ItemRequestReceiveDto requestDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
         if (requestDto.getDescription() == null) {
             throw new ItemAvailableException("Description cannot be empty");
         }
-        return itemRequestService.createItemRequest(requestDto, userId);
+        return ItemRequestMapper.toItemRequestDto(itemRequestService.createItemRequest(requestDto, userId));
     }
 
     @GetMapping

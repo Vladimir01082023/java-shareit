@@ -358,7 +358,7 @@ public class BookingServiceTest {
         when(userService.getUserById(anyLong()))
                 .thenReturn(UserMapper.toUserDto(user2));
 
-        when(bookingRepository.findBookingsByOwnerId(anyLong(), any()))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(anyLong(), any()))
                 .thenReturn(new PageImpl<>(List.of(booking)));
 
         List<Booking> bookings = bookingService.getAllBookingsForOwner("ALL", 1L, 0, 10);
@@ -402,7 +402,7 @@ public class BookingServiceTest {
 
         booking.setEnd(LocalDateTime.now().minusDays(1));
 
-        when(bookingRepository.findBookingsByOwnerId(anyLong(), any()))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(anyLong(), any()))
                 .thenReturn(new PageImpl<>(List.of(booking)));
 
         List<Booking> bookings = bookingService.getAllBookingsForOwner("PAST", 1L, 0, 10);
@@ -417,7 +417,7 @@ public class BookingServiceTest {
 
         booking.setStatus(Status.WAITING);
 
-        when(bookingRepository.findBookingsByOwnerId(anyLong(), any()))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(anyLong(), any()))
                 .thenReturn(new PageImpl<>(List.of(booking)));
 
         List<Booking> bookings = bookingService.getAllBookingsForOwner("FUTURE", 1L, 0, 10);
@@ -433,7 +433,7 @@ public class BookingServiceTest {
         booking.setEnd(LocalDateTime.now().plusDays(1));
         booking.setStart(LocalDateTime.now().minusDays(1));
 
-        when(bookingRepository.findBookingsByOwnerId(anyLong(), any()))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(anyLong(), any()))
                 .thenReturn(new PageImpl<>(List.of(booking)));
 
         List<Booking> bookings = bookingService.getAllBookingsForOwner("CURRENT", 1L, 0, 10);
