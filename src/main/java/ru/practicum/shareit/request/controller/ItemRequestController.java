@@ -9,7 +9,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReceiveDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.service.ItemRequestService;
-import ru.practicum.shareit.request.model.ItemRequest;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
@@ -34,16 +33,16 @@ public class ItemRequestController {
 
     @GetMapping
     public List<ItemRequestDto> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemRequestService.getItemRequest(userId).stream().
-                map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
+        return itemRequestService.getItemRequest(userId).stream()
+                .map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
     }
 
     @GetMapping("/all")
     public List<ItemRequestDto> getAll(@RequestHeader("X-Sharer-User-Id") Long userId,
                              @RequestParam(value = "from", required = false, defaultValue = "0")@PositiveOrZero Integer from,
                              @RequestParam(value = "size", required = false, defaultValue = "10")@Positive Integer size) {
-            return itemRequestService.getAllRequests(userId, from, size).stream().
-                    map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
+            return itemRequestService.getAllRequests(userId, from, size).stream()
+                    .map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
 
     }
 
