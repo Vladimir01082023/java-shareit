@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ItemController.class)
-public class ItemControllerTest {
+public class  ItemControllerTest {
     @Autowired
     ObjectMapper mapper;
 

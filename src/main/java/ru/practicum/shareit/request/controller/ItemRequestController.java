@@ -14,6 +14,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -32,20 +33,22 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequest> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemRequestService.getItemRequest(userId);
+    public List<ItemRequestDto> get(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        return itemRequestService.getItemRequest(userId).stream().
+                map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
     }
 
     @GetMapping("/all")
-    public List<ItemRequest> getAll(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<ItemRequestDto> getAll(@RequestHeader("X-Sharer-User-Id") Long userId,
                              @RequestParam(value = "from", required = false, defaultValue = "0")@PositiveOrZero Integer from,
                              @RequestParam(value = "size", required = false, defaultValue = "10")@Positive Integer size) {
-            return itemRequestService.getAllRequests(userId, from, size);
+            return itemRequestService.getAllRequests(userId, from, size).stream().
+                    map(ItemRequestMapper::toItemRequestDto).collect(Collectors.toList());
 
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequest getRequestById(@PathVariable Long requestId, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        return itemRequestService.getItemRequestById(requestId, userId);
+    public ItemRequestDto getRequestById(@PathVariable Long requestId, @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return ItemRequestMapper.toItemRequestDto(itemRequestService.getItemRequestById(requestId, userId));
     }
 }
