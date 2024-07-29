@@ -72,9 +72,10 @@ public class ItemRepositoryTest {
 
     @Test
     public void findAllByContainsTextTest() {
-        Page<Item> result = itemRepository.getItemByText("descriptiontest", PAGEABLE);
+        Page<Item> result = itemRepository.getItemByText("descriptionTest", PAGEABLE);
 
         assertThat(result.getTotalElements(), is(1L));
         assertThat(result.getNumberOfElements(), is(1));
     }
+
 }

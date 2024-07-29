@@ -51,7 +51,6 @@ public class ItemMapper {
         itemResponseDto.setAvailable(item.getAvailable());
         return itemResponseDto;
     }
-
 }
 
 

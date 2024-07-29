@@ -25,11 +25,11 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> getItem(@PathVariable Long itemId, @RequestHeader(USER_ID_HEADER) Long userId) {
         log.info("Getting item {} from user {}", itemId, userId);
-        return itemClient.getById(userId, itemId);
+        return itemClient.getById(itemId, userId);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Object> getItems(@RequestParam String text, @RequestHeader(USER_ID_HEADER) Long userId) {
+    public ResponseEntity<Object> getItemsByText(@RequestParam String text, @RequestHeader(USER_ID_HEADER) Long userId) {
         log.info("Getting items with text {}", text);
         return itemClient.searchItem(text, userId);
     }
@@ -44,7 +44,7 @@ public class ItemController {
     public ResponseEntity<Object> updateItem(@PathVariable Long itemId, @RequestBody ItemDto item,
                                              @RequestHeader(USER_ID_HEADER) Long userId) {
         log.info("Updating item {}", item);
-        return itemClient.updateItem(userId, item, itemId);
+        return itemClient.updateItem(itemId, item, userId);
     }
 
     @PostMapping("/{itemId}/comment")

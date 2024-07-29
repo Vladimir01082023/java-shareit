@@ -10,7 +10,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import ru.practicum.shareit.booking.dto.BookingDTO;
+import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.client.BaseClient;
 
@@ -28,9 +28,9 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getAllBookingForUser(Long userId, BookingState state, Integer from, Integer size) {
+    public ResponseEntity<Object> getAllBookingForUser(Long userId, String state, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
-                "state", state.name(),
+                "state", state,
                 "from", from,
                 "size", size
         );
@@ -39,22 +39,22 @@ public class BookingClient extends BaseClient {
 
     public ResponseEntity<Object> getAllBookingForOwner(Long userId, BookingState state, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
-                "state", state.name(),
+                "state", state,
                 "from", from,
                 "size", size
         );
         return get("/owner?state={state}&from={from}&size={size}", userId, parameters);
     }
 
-    public ResponseEntity<Object> bookItem(Long userId, BookingDTO bookingDTO) {
-        return post("", userId, bookingDTO);
+    public ResponseEntity<Object> bookItem(BookItemRequestDto bookItemRequestDto, Long userId) {
+        return post("", userId, bookItemRequestDto);
     }
 
     public ResponseEntity<Object> getBooking(Long userId, Long bookingId) {
         return get("/" + bookingId, userId);
     }
 
-    public ResponseEntity<Object> approveBooking(Long userId, boolean approved, Long bookingId) {
+    public ResponseEntity<Object> approveBooking(Long bookingId, Boolean approved, Long userId) {
         Map<String, Object> parameters = Map.of(
                 "approved", approved
         );

@@ -19,13 +19,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query(value = "select * from ITEMS as it " +
             "where it.ITEM_AVAILABLE = TRUE " +
             "and " +
-            "(it. ITEM_DESCRIPTION ilike '%?1%' or it.ITEM_NAME ilike '%?1%')", nativeQuery = true)
+            "(it. ITEM_DESCRIPTION ilike %?1% or it.ITEM_NAME ilike %?1%)", nativeQuery = true)
     List<Item> getItemByText(String itemText);
 
     @Query(value = "select * from ITEMS as it " +
             "where it.ITEM_AVAILABLE = TRUE " +
             "and " +
-            "(it. ITEM_DESCRIPTION ilike '%?1%'or it.ITEM_NAME ilike '%?1%')", nativeQuery = true)
+            "(it. ITEM_DESCRIPTION ilike %?1% or it.ITEM_NAME ilike %?1%)", nativeQuery = true)
     Page<Item> getItemByText(String itemText, Pageable pageable);
 
     @Query(value = "select * from items as i where i.ITEM_REQUEST_ID IN" +
