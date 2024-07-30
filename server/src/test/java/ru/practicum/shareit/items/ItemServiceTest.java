@@ -252,7 +252,7 @@ public class ItemServiceTest {
 
     @Test
     public void findAllItemsForUser_whenFoundItems_shouldReturnCollectionItemDtoBooking() {
-        when(itemRepository.findItemByOwnerId(user1.getId()))
+        when(itemRepository.findItemByOwnerIdOrderByIdAsc(user1.getId()))
                 .thenReturn(List.of(item));
         when(itemRepository.existsById(any()))
                 .thenReturn(true);

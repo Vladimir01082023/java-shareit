@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemBookDto> getItems(Long userId) {
-        List<Item> listItem = itemRepository.findItemByOwnerId(userId);
+        List<Item> listItem = itemRepository.findItemByOwnerIdOrderByIdAsc(userId);
         List<ItemBookDto> listItemBookDTO = new ArrayList<>();
         for (Item item : listItem) {
             ItemBookDto b;
@@ -130,10 +130,10 @@ public class ItemServiceImpl implements ItemService {
                 .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
                 .collect(Collectors.toList());
 
-        if (listBookingBeforeCurrentTime.size() != 0) {
+        if (!listBookingBeforeCurrentTime.isEmpty()) {
             itemBookDto.setLastBooking(BookingMapper.map(listBookingBeforeCurrentTime.get(0)));
         }
-        if (listBookingAfterCurrentTime.size() != 0) {
+        if (!listBookingAfterCurrentTime.isEmpty()) {
             itemBookDto.setNextBooking(BookingMapper.map(listBookingAfterCurrentTime.get(listBookingAfterCurrentTime.size() - 1)));
         }
         return ItemBookMapper.toDtoWithBookings(itemRepository.findById(itemId), itemBookDto, commentRepository.findByItemId(itemId));
@@ -143,7 +143,7 @@ public class ItemServiceImpl implements ItemService {
     public boolean checkItemOnBooking(Long itemID) {
         List<Booking> listOfBookings = bookingRepository.findBookingsByOwnerIdAndStatus(itemID);
 
-        if (listOfBookings == null || listOfBookings.isEmpty() || listOfBookings.size() == 0) {
+        if (listOfBookings == null || listOfBookings.isEmpty()) {
             return false;
         } else {
             return true;
@@ -155,7 +155,6 @@ public class ItemServiceImpl implements ItemService {
         if (!itemRepository.existsById(id)) {
             throw new NotFoundUserItemExceptions("Item not found");
         }
-        List<Comment> s = commentRepository.findByItemId(id);
         return ItemBookMapper.toDtoWithoutBookings(itemRepository.findById(id), commentRepository.findByItemId(id));
     }
 
@@ -164,7 +163,7 @@ public class ItemServiceImpl implements ItemService {
         if (!checkUserOnCommentForItem(userId, itemId)) {
             throw new ItemAvailableException("User is never booked this item!");
         }
-        if (commentDto.getText().isEmpty() || commentDto.getText() == null) {
+        if (commentDto.getText() == null || commentDto.getText().isEmpty()) {
             throw new ItemAvailableException("Text of comment is empty!");
         }
         Comment comment = CommentMapper.fromDTO(commentDto, itemRepository.findById(itemId).get(),
