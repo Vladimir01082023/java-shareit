@@ -42,16 +42,16 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addNewItem(Long userId, ItemDto item) {
         if (item.getDescription() == null || item.getDescription().isEmpty()) {
-            throw new NotFoundException("Description of item  can not null");
+            throw new NotFoundException("Description of item  can not null or empty");
         }
         if (item.getAvailable() == null) {
-            throw new NotFoundException("Availability can not be null");
+            throw new NotFoundException("Availability can not be null or empty");
         }
         if (item.getName() == null || item.getName().isEmpty()) {
             throw new NotFoundException("Name of item can not be empty or null");
         }
         if (!userRepository.existsById(userId)) {
-            throw new NotFoundUserItemExceptions("User not found");
+            throw new NotFoundUserItemExceptions("Error: User not found");
         }
         item.setOwnerId(userId);
         return ItemMapper.toDto(itemRepository.save(ItemMapper.fromDto(item)));
