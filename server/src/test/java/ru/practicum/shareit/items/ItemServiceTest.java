@@ -134,7 +134,7 @@ public class ItemServiceTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 itemService.addNewItem(1L, itemDtoCreated));
 
-        assertThat(exception.getMessage(), is("Description of item  can not null"));
+        assertThat(exception.getMessage(), is("Description of item  can not null or empty"));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ItemServiceTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 itemService.addNewItem(1L, itemDtoCreated));
 
-        assertThat(exception.getMessage(), is("Availability can not be null"));
+        assertThat(exception.getMessage(), is("Availability can not be null or empty"));
     }
 
     @Test
@@ -167,7 +167,7 @@ public class ItemServiceTest {
         NotFoundUserItemExceptions exception = assertThrows(NotFoundUserItemExceptions.class, () ->
                 itemService.addNewItem(99L, itemDtoCreated));
 
-        assertThat(exception.getMessage(), is("User not found"));
+        assertThat(exception.getMessage(), is("Error: User not found"));
     }
 
     @Test
