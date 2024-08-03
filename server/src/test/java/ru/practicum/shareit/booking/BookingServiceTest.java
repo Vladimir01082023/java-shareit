@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import ru.practicum.shareit.Status;
-import ru.practicum.shareit.booking.dto.BookingDTO;
+import ru.practicum.shareit.booking.dto.BookingDtoFromClient;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -54,7 +54,7 @@ public class BookingServiceTest {
     private Item item2;
     private User user1;
     private User user2;
-    private BookingDTO bookingDto;
+    private BookingDtoFromClient bookingDto;
     private Booking booking;
     private Booking bookingApproved;
 
@@ -110,7 +110,7 @@ public class BookingServiceTest {
         bookingApproved.setStatus(Status.APPROVED);
         bookingApproved.setBooker(new User());
 
-        bookingDto = new BookingDTO(1L, 1L, 1L, LocalDateTime.now().plusDays(1),
+        bookingDto = new BookingDtoFromClient(1L, 1L, 1L, LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(3), Status.WAITING);
     }
 
@@ -132,7 +132,7 @@ public class BookingServiceTest {
 
     @Test
     public void createBooking_whenCreatedNewBookingWitchIncorrectData_shouldThrowsException() {
-        bookingDto = new BookingDTO(1L, 1L, null, null, null, null);
+        bookingDto = new BookingDtoFromClient(1L, 1L, null, null, null, null);
 
         NotFoundUserItemExceptions exception = assertThrows(NotFoundUserItemExceptions.class, () ->
                 bookingService.createBooking(1L, bookingDto));
@@ -230,7 +230,7 @@ public class BookingServiceTest {
 
         assertThat(approvedBooking.getId(), is(booking.getId()));
         assertThat(approvedBooking.getStatus(), is(Status.APPROVED));
-        assertThat(approvedBooking.getId(), is(BookingMapper.toBookerDto(booking).getId()));
+        assertThat(approvedBooking.getId(), is(BookingMapper.toBookerDtoFromClient(booking).getId()));
     }
 
     @Test
@@ -262,7 +262,7 @@ public class BookingServiceTest {
         Booking bookingInformation = bookingService.getBooking(1L);
 
         assertBooking(booking, bookingInformation);
-        assertThat(booking.getStatus(), is(BookingMapper.toBookerDto(booking).getStatus()));
+        assertThat(booking.getStatus(), is(BookingMapper.toBookerDtoFromClient(booking).getStatus()));
     }
 
     @Test
@@ -291,7 +291,7 @@ public class BookingServiceTest {
         List<Booking> bookings = bookingService.getAllBookingsForUser(Status.WAITING.toString(), 1L, 0, 10);
 
         assertBooking(booking, bookings.get(0));
-        assertThat(bookings.get(0).getId(), is(BookingMapper.toBookerDto(booking).getId()));
+        assertThat(bookings.get(0).getId(), is(BookingMapper.toBookerDtoFromClient(booking).getId()));
     }
 
     @Test

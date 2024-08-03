@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.booking.dto.BookingDTO;
+import ru.practicum.shareit.booking.dto.BookingDtoFromClient;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exceptions.ItemAvailableException;
@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
     private static final Logger log = LoggerFactory.getLogger(BookingServiceImpl.class);
 
     @Override
-    public Booking createBooking(Long userID, BookingDTO bookingDTO) {
+    public Booking createBooking(Long userID, BookingDtoFromClient bookingDTO) {
         ItemDto curItem = itemService.getItemById(bookingDTO.getItemId());
         if (userService.getUserById(userID) == null) {
             throw new NotFoundUserItemExceptions("User not found");
