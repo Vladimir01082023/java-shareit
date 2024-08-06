@@ -4,10 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.Status;
-import ru.practicum.shareit.booking.dto.BookingDtoFromClient;
+import ru.practicum.shareit.booking.dto.BookingDTO;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.item.ItemBookMapper;
 import ru.practicum.shareit.item.comments.CommentDto;
+import ru.practicum.shareit.item.comments.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemBookDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
@@ -29,6 +30,8 @@ public class ItemServiceIntegrationTest {
     @Autowired
     private UserService userService;
     @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
     private ItemService itemService;
     @Autowired
     private BookingService bookingService;
@@ -39,8 +42,8 @@ public class ItemServiceIntegrationTest {
     private UserDto user2 = new UserDto(2L, "user2", "user2@user2.com");
     ItemDto item1Dto = new ItemDto(1L, "test1", "description", true, null, 2L);
     ItemDto item2Dto = new ItemDto(2L, "test1", "description", true, null, 1L);
-    BookingDtoFromClient itemBooking1 = new BookingDtoFromClient(1L, 1L, 1L, currentTime, currentTime.plusDays(1), Status.WAITING);
-    BookingDtoFromClient itemBooking2 = new BookingDtoFromClient(2L, 1L, 1L, currentTime, currentTime.plusDays(1), Status.WAITING);
+    BookingDTO itemBooking1 = new BookingDTO(1L, 1L, 1L, currentTime, currentTime.plusDays(1), Status.WAITING);
+    BookingDTO itemBooking2 = new BookingDTO(2L, 1L, 1L, currentTime, currentTime.plusDays(1), Status.WAITING);
 
     CommentDto comment1 = new CommentDto(1L, "comment", "user1", currentTime);
     ItemRequestReceiveDto request = new ItemRequestReceiveDto(1L, "description");

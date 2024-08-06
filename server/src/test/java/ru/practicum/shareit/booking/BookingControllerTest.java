@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Status;
-import ru.practicum.shareit.booking.dto.BookingDtoFromClient;
+import ru.practicum.shareit.booking.dto.BookingDTO;
 import ru.practicum.shareit.booking.controller.BookingController;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -46,7 +46,7 @@ public class BookingControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private BookingDtoFromClient bookingDto;
+    private BookingDTO bookingDto;
     private Booking booking;
     private Item item;
     LocalDateTime dateTime;
@@ -72,7 +72,7 @@ public class BookingControllerTest {
         booking.setStatus(Status.APPROVED);
         booking.setBooker(new User());
 
-        bookingDto = new BookingDtoFromClient(1L, 1L, 1L, LocalDateTime.now().plusDays(1),
+        bookingDto = new BookingDTO(1L, 1L, 1L, LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(3), Status.WAITING);
     }
 
